@@ -530,7 +530,7 @@ footer{
     cursor: pointer;
     gap: 10px;
     align-items: center;
-    margin-left: 10px;
+    margin-left: 25px;
 }
 
 .header-nav-icons i{
@@ -641,7 +641,7 @@ footer{
     position: absolute;
     height: 350px;
     width: 270px;
-    top: 128px; /* Adjusted for proper spacing from the nav-icons */
+    top: 80px; /* Adjusted for proper spacing from the nav-icons */
     right: 100px; /* Align with the nav-icons */
     background-color: #fff;
     padding: 10px;
@@ -727,7 +727,21 @@ footer{
     font-size: 16px;
 }
 
+.header-nav-icons {
+    position: relative; /* Add relative positioning to the parent */
+}
 
+.new-message-notify {
+    position: absolute;
+    top: 3.5px;
+    right: 200px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    z-index: 10; /* Ensure it's above other elements */
+}
 
 /* Hide dropdown content by default */
 .nav-links .dropdown-browse {

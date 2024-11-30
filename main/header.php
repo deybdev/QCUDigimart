@@ -244,7 +244,6 @@
             <!-- If no one is logged in -->
             <?php else: ?>
             <div class="nav-icons">
-                <i class="fa-regular fa-user"></i>
                 <p><a href="../uploads/login.php">Login</a> | <a href="../uploads/register.php">Register</a></p>
             </div>
             <?php endif; ?>
@@ -321,24 +320,5 @@
                 modal.style.display = "none";
             }
         </script>
-
-    <style>
-    .header-nav-icons {
-    position: relative; /* Add relative positioning to the parent */
-}
-
-.new-message-notify {
-    position: absolute;
-    top: 3.5px;
-    right: 187px;
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    display: inline-block;
-    z-index: 10; /* Ensure it's above other elements */
-}
-    </style>
-
     </body>
     </html>
