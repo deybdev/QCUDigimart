@@ -2,7 +2,25 @@
 include '../config/config.php';
 session_start(); // Start the session to access session variables
 
-// Check if the form is submitted
+// Retrieve the saved products count for the logged-in customer
+$saved_count = 0; // Default to 0 if no saved products
+
+if (isset($_SESSION['customer_id'])) {
+    $customer_id = $_SESSION['customer_id'];
+    $saved_query = "SELECT COUNT(*) AS saved_count FROM saved_products WHERE user_id = ?";
+    $saved_stmt = $conn->prepare($saved_query);
+    $saved_stmt->bind_param("i", $customer_id);
+    $saved_stmt->execute();
+    $saved_result = $saved_stmt->get_result();
+
+    if ($saved_result && $row = $saved_result->fetch_assoc()) {
+        $saved_count = $row['saved_count']; // Use the correct alias from the query
+    }
+    $saved_stmt->close();
+}
+
+
+
 if (isset($_POST['submit'])) {
     if ($_FILES['image']['error'] === 4) {
         echo "<script>alert('Image does not exist');</script>";
@@ -14,13 +32,11 @@ if (isset($_POST['submit'])) {
         $validImageExtensions = ['jpg', 'jpeg', 'png'];
         $imageExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        // Validate image format and size
         if (!in_array($imageExtension, $validImageExtensions)) {
             echo "<script>alert('Invalid image format');</script>";
         } elseif ($fileSize > 1000000) {
             echo "<script>alert('Image size is too large');</script>";
         } else {
-            // Create a unique name for the new image
             $newImageName = '../assets/user/' . uniqid() . '.' . $imageExtension;
 
             // Move the uploaded file to the assets directory
@@ -60,6 +76,17 @@ if (isset($_POST['submit'])) {
     <?php include '../main/header.php'; ?>
 
     <div class="update-profile-container">
+        <div class="right-section">
+            <!-- Saved Products Section -->
+            <div class="saved-products">
+                <i class="fa-solid fa-heart"></i>
+                <div class="saved-products-info">    
+                    <h1><?php echo $saved_count; ?></h1>
+                    <p>All Saved Products</p>
+                    <a href="../customer/saved_products.php">View all</a>
+                </div>
+            </div>
+        </div>
         <!-- Left Section: Profile Section -->
         <form action="update_profile.php" method="post" autocomplete="off" enctype="multipart/form-data">
             <div class="profile-section">
@@ -75,45 +102,13 @@ if (isset($_POST['submit'])) {
                     <input type="text" value="<?php echo htmlspecialchars($_SESSION['customer_email']); ?>" disabled>
                     <label>User Type</label>
                     <input type="text" value="Customer" disabled>
-                    <label>Contact No.</label>
-                    <input type="text" value="09123456789" disabled>
                 </div>
                 <button class="btn" name="submit">Update Profile</button>
             </div>
         </form>
 
         <!-- Right Section: Saved Products and Recently Viewed -->
-        <div class="right-section">
-            <!-- Saved Products Section -->
-            <div class="saved-products">
-                <i class="fa-solid fa-heart"></i>
-                <div class="saved-products-info">    
-                    <h1>17</h1>
-                    <p>All Saved Products</p>
-                    <a href="#">View all</a>
-                </div>
-            </div>
-
-            <!-- Recently Viewed Section -->
-            <div class="recently-viewed">
-                <h3>Recently Viewed</h3>
-                <ul>
-                    <li>
-                        <p class="item-title">The Chicken Coop | Entrepreneurs Team</p>
-                        <p class="item-date">Sept. 27, 2024</p>
-                    </li>
-                    <li>
-                        <p class="item-title">The Chicken Coop | Entrepreneurs Team</p>
-                        <p class="item-date">Sept. 27, 2024</p>
-                    </li>
-                    <li>
-                        <p class="item-title">The Chicken Coop | Entrepreneurs Team</p>
-                        <p class="item-date">Sept. 27, 2024</p>
-                    </li>
-                </ul>
-                <button class="btn">See All</button>
-            </div>
-        </div>
+        
     </div>
 
     <!-- Include Footer -->

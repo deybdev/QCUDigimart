@@ -420,7 +420,7 @@ footer{
     display: flex;
     margin-top: 15px;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 50px;
 }
 
 .logo-container .image-logo img{
@@ -639,16 +639,19 @@ footer{
 .dropdown-message {
     display: none;
     position: absolute;
-    height: 350px;
-    width: 270px;
-    top: 80px; /* Adjusted for proper spacing from the nav-icons */
-    right: 100px; /* Align with the nav-icons */
+    height: auto;
+    max-height: 350px;
+    width: 300px;
+    top: 80px;
+    right: 100px;
     background-color: #fff;
-    padding: 10px;
-    z-index: 1000; /* Ensure it's above other elements */
+    z-index: 1000;
     border: 2px solid #ddd;
     border-radius: 10px;
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
+
 
 /* Show the container when the 'visible' class is added */
 .dropdown-message.visible {
@@ -657,15 +660,20 @@ footer{
 
 /* Header for the dropdown */
 .dropdown-message h3 {
-    margin: 8px 0 15px 0;
-    padding: 5px 0;
-    text-align: center;
+    position: sticky; /* Makes the header fixed within the dropdown */
+    top: 0; /* Sticks to the top of the dropdown container */
+    background-color: #fff; /* Ensures the header has a solid background */
+    z-index: 10; /* Keeps it above other content in the dropdown */
+    margin: 0; /* Remove extra margin for proper alignment */
+    padding: 15px; /* Add padding for spacing */
+    border-bottom: 1px solid #ddd; /* Optional: separates the header visually */
     font-size: 16px;
+    text-align: center;
     color: #333;
 }
 
+
 .dropdown-message .recent-chats {
-    margin: 5px 0;
     max-height: 400px; /* Adjust based on your design */
     overflow-y: auto;
 }
@@ -944,20 +952,20 @@ footer{
 /* UPDATE PROFILE START */
 
 .update-profile-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-gap: 20px;
-    margin: 50px auto;
-    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 10px auto;
 }
 
 
-.profile-section, .saved-products, .recently-viewed {
+.profile-section, .saved-products{
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Profile Section on the Left */
@@ -1058,36 +1066,6 @@ footer{
 
 .saved-products a:hover {
     text-decoration: underline;
-}
-
-/* Recently Viewed */
-.recently-viewed ul {
-    list-style: none;
-    margin-top: 30px;
-}
-
-.recently-viewed ul li {
-    padding: 20px 0;
-    border-bottom: 1px solid #ccc;
-}
-
-.item-title {
-    font-weight: bold;
-}
-
-.item-date {
-    color: gray;
-    margin-top: 10px;
-}
-
-.recently-viewed button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 /* UPDATE PROFILE END */
@@ -2001,6 +1979,11 @@ footer{
     text-decoration: underline;
 }
 
+.remove-cart button{
+    border: none;
+    cursor: pointer;
+}
+
 /* SAVED PRODUCTS END */
 
 /* Animations */
@@ -2811,7 +2794,7 @@ footer{
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    padding: 20px 10px;
+    padding: 15px 15px;
 }
 
 .btn:hover{

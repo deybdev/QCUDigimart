@@ -121,7 +121,7 @@ $result = $stmt->get_result();
                             <td>
                                 <form method="POST" action="">
                                     <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($row['product_id']); ?>">
-                                    <button type="submit">Remove</button>
+                                    <button type="submit" class="remove-cart">Remove</button>
                                 </form>
                             </td>
                         </tr>
