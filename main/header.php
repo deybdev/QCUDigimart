@@ -24,7 +24,7 @@
             u.profile_image, 
             IFNULL(s.store_name, u.first_name) AS name, 
             IFNULL(s.store_profile, '') AS store_profile,
-            SUM(IF(m.is_read = 0, 1, 0)) AS unread_count  -- Count unread messages
+            SUM(IF(m.receiver_id = ? AND m.is_read = 0, 1, 0)) AS unread_count  -- Only count unread messages for the current user
         FROM message m
         LEFT JOIN customer u ON u.id = IF(m.sender_id = ?, m.receiver_id, m.sender_id)
         LEFT JOIN seller s ON s.id = IF(m.sender_id = ?, m.receiver_id, m.sender_id)
@@ -32,18 +32,27 @@
         GROUP BY chat_partner_id 
         ORDER BY last_message_time";
 
-
-
-    // If the user is a seller, bind the seller's ID in the prepared statement
+    // Update the bind_param to pass the current_user_id twice more
     if ($user_type == 'seller') {
         $recent_chats_stmt = $conn->prepare($recent_chats_query);
-        // Corrected: Only pass 5 variables instead of 6
-        $recent_chats_stmt->bind_param("iiiii", $current_user_id, $current_user_id, $current_user_id, $current_user_id, $current_user_id);
+        $recent_chats_stmt->bind_param("iiiiii", 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id
+        );
     } else {
-        // If the user is a customer, bind the customer’s ID in the prepared statement
         $recent_chats_stmt = $conn->prepare($recent_chats_query);
-        // Corrected: Only pass 5 variables instead of 6
-        $recent_chats_stmt->bind_param("iiiii", $current_user_id, $current_user_id, $current_user_id, $current_user_id, $current_user_id);
+        $recent_chats_stmt->bind_param("iiiiii", 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id, 
+            $current_user_id
+        );
     }
 
     // Execute the prepared statement and get the result
@@ -276,19 +285,21 @@
 
     // If notification exists, send an AJAX request to mark messages as read
     if (notification) {
-        fetch('../message/mark_messages_read.php', {
-            method: 'POST',
-            // You might want to send additional data like user ID if needed
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Remove the notification dot
-                notification.remove();
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+     fetch('../message/mark_messages_read.php', {
+         method: 'POST',
+         body: JSON.stringify({ receiver_id: <?php echo $current_user_id; ?> }),
+         headers: { 'Content-Type': 'application/json' }
+     })
+     .then(response => response.json())
+     .then(data => {
+         if (data.success) {
+             // Remove the notification dot
+             notification.remove();
+         }
+     })
+     .catch(error => console.error('Error:', error));
+ }
+
 }
 
 
