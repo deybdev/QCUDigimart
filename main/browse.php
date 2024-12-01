@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +27,8 @@
     echo "<h2>$org_title</h2>";
 
     try {
+        // Example: Set session variable when the user logs in
+        $_SESSION['user_type'] = 'seller'; // 'customer' or 'seller'
         $customer_id = isset($_SESSION['customer_id']) ? $_SESSION['customer_id'] : null;
 
         $stmt = $conn->prepare("

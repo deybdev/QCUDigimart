@@ -1,113 +1,164 @@
+<?php
+session_start();
+include '../config/config.php'; // Include your database connection
+
+$query = "SELECT r.id, r.reporter_id, r.target_id, r.report_type, r.reason, r.description, r.proof, r.date_reported, 
+       r.status, reporter.first_name AS reporter_name, reporter.last_name AS reporter_lastname, target.store_name AS target_name 
+FROM reports r 
+LEFT JOIN customer reporter ON r.reporter_id = reporter.id 
+LEFT JOIN seller target ON r.target_id = target.id;
+";
+
+$result = $conn->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports</title>
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Background */
+            overflow: auto;
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <?php include'sidebar.php'; ?>
+
+    <?php include 'sidebar.php'; ?>
 
     <div class="wrapper">
         <h1>Reports</h1>
-            <div class="filter-report">
-                    <p>Sort by: </p>
-                <div class="sort-report-accounts">
-                    <select name="user_type" id="user_type">
-                        <option value="all" selected>All</option>
-                        <option value="flagged">Flagged</option>
-                        <option value="ewan">Ewan</option>
-                    </select>
-                </div>
+        <div class="filter-report">
+            <p>Sort by: </p>
+            <div class="sort-report-accounts">
+                <select name="user_type" id="user_type">
+                    <option value="all" selected>All</option>
+                    <option value="flagged">Flagged</option>
+                    <option value="ewan">Ewan</option>
+                </select>
             </div>
-        <div class="reports-container">
-            <!-- LEFT SIDE -->
-             <div class="reports-table">
-                <table id="default-table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Complainant</th>
-                        <th>Reported</th>
-                        <th>Report Type</th>
-                        <th>Submitted At</th>
-                        <th>Proof</th>
-                        <th>Action</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>John Doe <span class="user-type"><br>(C)</span></td>
-                        <td>Store ABC <span class="user-type"><br>(S)</span></td>
-                        <td>Fraud</td>
-                        <td>2024-10-20 14:30</td>
-                        <td><a href="#">View Proof</a></td>
-                        <td><button>Resolve</button><button>Ignore</button></td>
+        </div>
 
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jane Smith <span class="user-type"><br>(S)</span></td>
-                        <td>Store XYZ <span class="user-type"><br>(C)</span></td>
-                        <td>Product Issue</td>
-                        <td>2024-10-21 09:15</td>
-                        <td><a href="#">View Proof</a></td>
-                        <td><button>Resolve</button><button>Ignore</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Mike Johnson <span class="user-type"><br>(C)</span></td>
-                        <td>Store LMN <span class="user-type"><br>(S)</span></td>
-                        <td>Harassment</td>
-                        <td>2024-10-22 17:45</td>
-                        <td><a href="#">View Proof</a></td>
-                        <td><button>Resolve</button><button>Ignore</button></td>
-                    </tr>
-                </table>
-            </div>
-            <!-- Right Section -->
-            <div class="right-section">
-                <div class="flagged-count">
-                    <div class="flagged-info">    
-                        <p>Flagged Accounts:</p>
-                        <h2>43</h2>
-                    </div>
-                </div>
-                <div class="recent-reports-container">
-                    <h3>Recent Activity</h3>
-                        <div class="recent-box">
-                            <div class="recent-image">
-                                <img src="../assets/CAHILIG.jpg" alt="haha">
-                            </div>
-                            <div class="recent-info">
-                                <h4>Efren Dave Cahilig</h4>
-                                <p>June 19 2024 - 8:00 AM</p>
-                                <a href="#">Account Suspended</a>
-                            </div>
-                        </div>
-                        <div class="recent-box">
-                            <div class="recent-image">
-                                <img src="../assets/AMBINOC.png" alt="haha">
-                            </div>
-                            <div class="recent-info">
-                                <h4>Ahmad Ambinoc</h4>
-                                <p>October 18 2024 - 7:56 AM</p>
-                                <a href="#">Account Banned</a>
-                            </div>
-                        </div>
-                        <div class="recent-box">
-                            <div class="recent-image">
-                                <img src="../assets/DE LEON.jpg" alt="haha">
-                            </div>
-                            <div class="recent-info">
-                                <h4>KARL DE LEON</h4>
-                                <p>November 10 2024 - 6:56 PM</p>
-                                <a href="#">Account Suspended</a>
-                            </div>
-                        </div>
-                        
-                </div>
+        <div class="accounts-table-container reports-tab">
 
-            </div>
+            <table id="default-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Reporter</th>
+                    <th>Report Type</th>
+                    <th>Target</th>
+                    <th>Description</th>
+                    <th>Proof</th>
+                    <th>Action</th>
+                </tr>
+                
+                <?php while ($row = $result->fetch_assoc()) : ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['id']); ?></td>
+                        <td>
+                            <?php
+                            $reporter_name = !empty($row['reporter_name']) ? htmlspecialchars($row['reporter_name']) . ' ' . htmlspecialchars($row['reporter_lastname']) : 'Unknown Reporter';
+                            echo $reporter_name;
+                            ?>
+                        </td>
+
+                        <td><?php echo htmlspecialchars($row['reason']); ?></td>
+                        <td><?php echo htmlspecialchars($row['target_name']); ?></td>
+                        <td>
+                            <!-- Button to view the description -->
+                            <button class="show-description" data-description="<?php echo htmlspecialchars($row['description']); ?>">
+                                View Description
+                            </button>
+                        </td>
+                        <td><a href="<?php echo htmlspecialchars($row['proof']); ?>" target="_blank">View Proof</a></td>
+                        <td>
+                            <button>Resolve</button>
+                            <button>Ignore</button>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+
+            </table>
+        </div>
     </div>
+
+    <!-- Modal for Description -->
+    <div id="descriptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Description</h2>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("descriptionModal");
+
+        // Get all buttons that open the modal
+        var buttons = document.querySelectorAll('.show-description');
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal and show the description
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var description = button.getAttribute('data-description');
+                document.getElementById("modal-description").innerText = description;
+                modal.style.display = "block";
+            });
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>

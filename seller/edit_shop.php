@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssi", $bannerPath, $logoPath, $description, $seller_id);
 
     if ($stmt->execute()) {
+        $_SESSION['success_message'] = "Shop profile updated successfully!";
         header("Location: edit_shop.php");
         exit;
     } else {
@@ -73,6 +74,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
+
+        <?php
+            if (isset($_SESSION['info_message'])) {
+                $infoMessage = htmlspecialchars(addslashes($_SESSION['info_message']));
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const infoMessage = "' . $infoMessage . '";
+                            showInfoModal(infoMessage); 
+                        });
+                    </script>';
+                unset($_SESSION['info_message']);
+            }
+
+            if (isset($_SESSION['success_message'])) {
+                $infoMessage = htmlspecialchars(addslashes($_SESSION['success_message']));
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const infoMessage = "' . $infoMessage . '";
+                            showSuccessModal(infoMessage); 
+                        });
+                    </script>';
+                unset($_SESSION['success_message']);
+            }
+        ?>
+
         <!-- Sidebar -->
         <?php include '../seller/sidebar.php'; ?>
 
@@ -80,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="wrapper">
             <div class="edit-container">
                 <div class="link-button">
-                    <a href="../main/home.php">Home</a><span>/</span>
-                    <a href="../main/about.php">About Us</a><span>/</span>
+                    <a href="../main/home.php">Home</a><span>|</span>
+                    <a href="../main/about.php">About Us</a><span>|</span>
                     <a href="#">Contact</a>
                 </div>
 

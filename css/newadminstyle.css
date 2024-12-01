@@ -529,7 +529,7 @@ a:hover{
 }
 
 .sellers-table #default-table button,
-.reports-table #default-table button{
+.reports-tab #default-table button{
     padding: 4px 10px;
     margin: 2px;
     border: 1px solid transparent;
@@ -539,7 +539,9 @@ a:hover{
     transition: background-color 0.3s;
 }
 
-.reports-table #default-table td{
+
+
+.reports-tab #default-table td{
     padding: 5px;
 }
 
@@ -561,28 +563,28 @@ a:hover{
     background-color: var(--hover-danger-button); 
 }
 
-.reports-table #default-table button:hover{
+.reports-tab #default-table button:hover{
     background-color:  var(--hover-success-button);
 }
 
-.reports-table #default-table button:nth-child(2){
+.reports-tab #default-table button:nth-child(2){
     background-color: var(--danger-button);
     padding: 4px 15px;
 }
 
-.reports-table #default-table button:nth-child(1){
+.reports-tab #default-table button:nth-child(1){
     background-color: var(--success-button);
 }
 
-.reports-table #default-table button:nth-child(1):hover{
+.reports-tab #default-table button:nth-child(1):hover{
     background-color: var(--hover-success-button);
 }
 
-.reports-table #default-table button:nth-child(2):hover{
+.reports-tab #default-table button:nth-child(2):hover{
     background-color: var(--hover-danger-button);
 }
 
-.reports-table #default-table span{
+.reports-tab #default-table span{
     color: #ec0000;
     font-size: 12px;
     font-weight: 600;
@@ -701,8 +703,7 @@ a:hover{
     margin-left: 20px;
 }
 
-.sellers-table,
-.reports-table {
+.sellers-table{
     border: 2px solid #d9d9d9;
     border-radius: 10px;
     width: 790px;
@@ -762,7 +763,6 @@ a:hover{
     border-bottom: 2px solid #d9d9d9 ;
     padding: 15px 0;
 }
-
 
 .recent-reports-container .recent-box{
     display: flex;
@@ -907,3 +907,6 @@ a:hover{
     background-color: var(--hover-blue-button);
 }
 /* PENDING PRODUCT END */
+
+/* MODAL REPORT START */
+

@@ -84,90 +84,17 @@ $result = $stmt->get_result();
     <title>Listings</title>
 
     <style>
-      .actions-cell {
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        /* General button styles */
-        .actions-cell button {
-            margin: 5px;
-            padding: 8px 15px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        /* Specific styles for Edit Quantity button */
-        .edit-quantity-btn {
-            background-color: #007bff;
-        }
-
-        .edit-quantity-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        /* Specific styles for Remove Product button */
-        .remove-product-btn {
-            background-color: #dc3545;
-        }
-
-        .remove-product-btn:hover {
-            background-color: #a71d2a;
-            transform: scale(1.05);
-        }
-
-        /* Edit Quantity form styles */
-        .edit-quantity-form {
-            margin-top: 10px;
-        }
-
-        .edit-quantity-form input {
-            width: 60%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        /* Confirm and Cancel buttons */
-        .confirm-edit-btn {
-            background-color: #28a745;
-            margin-left: 5px;
-        }
-
-        .confirm-edit-btn:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-
-        .cancel-edit-btn {
-            background-color: #6c757d;
-            margin-left: 5px;
-        }
-
-        .cancel-edit-btn:hover {
-            background-color: #5a6268;
-            transform: scale(1.05);
-        }
-
-
     </style>
 
 </head>
 <body>
     <div class="container">
+
         <?php include '../seller/sidebar.php'; ?>
         <div class="wrapper">
             <div class="link-button">
-                <a href="../main/home.php">Home </a><span>/</span>
-                <a href="../main/about.php">About Us </a><span>/</span>
+                <a href="../main/home.php">Home </a><span>|</span>
+                <a href="../main/about.php">About Us </a><span>|</span>
                 <a href="#">Contact</a>
             </div>
             <h2>Category</h2>

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('iii', $quantity, $productId, $sellerId);
 
         if ($stmt->execute()) {
-            echo json_encode(['success' => true]);
+            echo json_encode(['success' => true, 'message' => 'Product quantity updated successfully']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Database error: ' . $stmt->error]);
         }

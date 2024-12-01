@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ssdisssi", $name, $description, $price, $quantity, $category_id, $category_name, $image_paths_json, $s_id);
 
     if ($stmt->execute()) {
-        $_SESSION['info_success'] = 'Your account is banned. Contact support for assistance.';
+        $_SESSION['success_message'] = 'Product added successfully!';
     } else {
         echo "<p>Error adding product: " . $stmt->error . "</p>";
     }
@@ -116,11 +116,36 @@ $conn->close();
 <body>
     
     <div class="container">
+
+        <?php
+            if (isset($_SESSION['info_message'])) {
+                $infoMessage = htmlspecialchars(addslashes($_SESSION['info_message']));
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const infoMessage = "' . $infoMessage . '";
+                            showInfoModal(infoMessage); 
+                        });
+                    </script>';
+                unset($_SESSION['info_message']);
+            }
+
+            if (isset($_SESSION['success_message'])) {
+                $infoMessage = htmlspecialchars(addslashes($_SESSION['success_message']));
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const infoMessage = "' . $infoMessage . '";
+                            showSuccessModal(infoMessage); 
+                        });
+                    </script>';
+                unset($_SESSION['success_message']);
+            }
+        ?>
+
         <?php include '../seller/sidebar.php'; ?>
         <div class="wrapper">
             <div class="link-button">
-                <a href="../main/home.php">Home </a><span>/</span>
-                <a href="../main/about.php">About Us </a><span>/</span>
+                <a href="../main/home.php">Home </a><span>|</span>
+                <a href="../main/about.php">About Us </a><span>|</span>
                 <a href="#">Contact</a>
             </div>
             <div class="add-pro-header">

@@ -30,9 +30,6 @@
                 </a>
         </div>
     </section>
-    <section id="new-product">
-
-    </section>
 
     <?php include "../main/footer.php"; ?>
 </body>

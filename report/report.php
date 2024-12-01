@@ -2,7 +2,10 @@
 $product_name = $product_image = $seller_name = $seller_profile = $heading = "";
 include "../config/config.php"; // Adjust path if needed
 
+// Ensure the session is started
+session_start();
 
+// Function to add a report
 function addReport($conn, $reporter_id, $target_id, $report_type, $reason, $description, $proof = null)
 {
     $query = "INSERT INTO reports (reporter_id, target_id, report_type, reason, description, proof) 
@@ -15,6 +18,15 @@ function addReport($conn, $reporter_id, $target_id, $report_type, $reason, $desc
         return $success;
     }
     return false;
+}
+
+// Check if the customer is logged in and set the reporter_id from the session
+if (isset($_SESSION['customer_id'])) {
+    $reporter_id = $_SESSION['customer_id']; // Set the reporter_id from session (customer's ID)
+} else {
+    // If not logged in, handle this as needed (e.g., redirect or show error)
+    echo "<script>alert('You must be logged in to report.'); window.location.href = '../login/login.php';</script>";
+    exit;
 }
 
 // Check if 'seller_id' or 'product_id' is set in the URL parameters
@@ -45,7 +57,6 @@ if (isset($_GET['seller_id'])) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_report'])) {
-    $reporter_id = 1; // Replace this with the actual reporter ID (e.g., from session)
     $target_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : intval($_POST['seller_id']);
     $report_type = isset($_POST['product_id']) ? 'product' : 'seller';
     $reason = htmlspecialchars($_POST['reason']);
@@ -64,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_report'])) {
     // Add report to the database
     if (addReport($conn, $reporter_id, $target_id, $report_type, $reason, $description, $proof)) {
         echo "<script>alert('Report submitted successfully.');</script>";
-        exit;
+        header("Location: ../main/main-home.php");
     } else {
         echo "<script>alert('Failed to submit the report. Please try again.');</script>";
         exit;
