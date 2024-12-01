@@ -76,16 +76,90 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<!-- HTML Output (Unchanged) -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listings</title>
+
+    <style>
+      .actions-cell {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* General button styles */
+        .actions-cell button {
+            margin: 5px;
+            padding: 8px 15px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Specific styles for Edit Quantity button */
+        .edit-quantity-btn {
+            background-color: #007bff;
+        }
+
+        .edit-quantity-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Specific styles for Remove Product button */
+        .remove-product-btn {
+            background-color: #dc3545;
+        }
+
+        .remove-product-btn:hover {
+            background-color: #a71d2a;
+            transform: scale(1.05);
+        }
+
+        /* Edit Quantity form styles */
+        .edit-quantity-form {
+            margin-top: 10px;
+        }
+
+        .edit-quantity-form input {
+            width: 60%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        /* Confirm and Cancel buttons */
+        .confirm-edit-btn {
+            background-color: #28a745;
+            margin-left: 5px;
+        }
+
+        .confirm-edit-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .cancel-edit-btn {
+            background-color: #6c757d;
+            margin-left: 5px;
+        }
+
+        .cancel-edit-btn:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+
+
+    </style>
+
 </head>
 <body>
     <div class="container">
@@ -108,9 +182,9 @@ $result = $stmt->get_result();
                 <table id="listing-table">
                     <thead>
                         <tr>
-                            <th class="checkbox-cell"><input type="checkbox"></th>
                             <th>Details</th>
                             <th>Listing Information</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,7 +204,6 @@ $result = $stmt->get_result();
                         };
                     ?>
                         <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
                             <td class="details-cell">
                                 <div class="image-cell">
                                     <img src="../assets/<?php echo htmlspecialchars($firstImage); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
@@ -151,13 +224,128 @@ $result = $stmt->get_result();
                                     </p>
                                 </div>
                             </td>
+                            <td class="actions-cell">
+                                <div class="action-buttons">
+                                    <button class="edit-quantity-btn" data-id="<?php echo $row['id']; ?>">Edit Quantity</button>
+                                    <button class="remove-product-btn" 
+                                        data-id="<?php echo $row['id']; ?>" 
+                                        data-status="<?php echo $row['status']; ?>">Remove Product
+                                    </button>
+                                </div>
+                                <div class="edit-quantity-form" style="display: none;">
+                                    <input type="number" class="quantity-input" data-id="<?php echo $row['id']; ?>" placeholder="Enter quantity">
+                                    <button class="confirm-edit-btn" data-id="<?php echo $row['id']; ?>">Confirm</button>
+                                    <button class="cancel-edit-btn" data-id="<?php echo $row['id']; ?>">Cancel</button>
+                                </div>
+                            </td>
                         </tr>
                     <?php } ?>
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Handle Edit Quantity button click
+        document.querySelectorAll('.edit-quantity-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const actionCell = e.target.closest('.actions-cell');
+                const editForm = actionCell.querySelector('.edit-quantity-form');
+                const actionButtons = actionCell.querySelector('.action-buttons');
+                
+                // Hide action buttons and show edit form
+                actionButtons.style.display = 'none';
+                editForm.style.display = 'block';
+            });
+        });
+
+        // Handle Cancel button click
+        document.querySelectorAll('.cancel-edit-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const actionCell = e.target.closest('.actions-cell');
+                const editForm = actionCell.querySelector('.edit-quantity-form');
+                const actionButtons = actionCell.querySelector('.action-buttons');
+                
+                // Hide edit form and show action buttons
+                editForm.style.display = 'none';
+                actionButtons.style.display = 'block';
+            });
+        });
+
+        // Handle Confirm button click
+        document.querySelectorAll('.confirm-edit-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const actionCell = e.target.closest('.actions-cell');
+                const input = actionCell.querySelector('.quantity-input');
+                const productId = button.getAttribute('data-id');
+                const quantity = input.value;
+
+                if (quantity && quantity > 0) {
+                    // Send an AJAX request to update the quantity
+                    fetch('update_quantity.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ id: productId, quantity: quantity }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Quantity updated successfully!');
+                            location.reload(); // Reload page to reflect changes
+                        } else {
+                            alert('Failed to update quantity: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                } else {
+                    alert('Please enter a valid quantity.');
+                }
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+    // Handle Remove Product button click
+    document.querySelectorAll('.remove-product-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const productId = button.getAttribute('data-id');
+            const status = button.getAttribute('data-status'); // Get the product status
+
+            if (confirm('Are you sure you want to remove this product?')) {
+                // Send an AJAX request to remove the product
+                fetch('remove_product.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: productId, status: status }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // Reload page to reflect changes
+                    } else {
+                        alert('Failed to remove product: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    });
+});
+
+
+</script>
+
+
 </body>
 </html>
