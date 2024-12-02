@@ -414,7 +414,7 @@ footer{
     align-items: center;
     height: 120px;
     width: auto;
-    background-color: rgb(248, 248, 248);
+    background: rgb(243, 242, 242);
 }
 
 .logo-container{
@@ -1471,6 +1471,11 @@ footer{
     vertical-align: top;
     border-bottom: 2px solid #ddd;
 }
+
+.save-table-container button{
+    border: none;
+}
+
 
 #save-table    th,
 #listing-table th {
@@ -2712,6 +2717,7 @@ footer{
 /* MAIN HOME START */
 
 #hero-section {
+    background-color: #f7f5f5;
     border-bottom: 2px solid #ddd;
     color: var(--text-color);    
     height: 80.9vh;

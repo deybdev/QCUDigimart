@@ -13,7 +13,7 @@
     <div class="about-container">
         <!-- Left Section (Fixed Image) -->
         <div class="about-left-section">
-            <img src="../assets/about-img.jpg" alt="Building Image">
+            <img src="../assets/qcu-about.jpg" alt="Building Image">
         </div>
 
         <!-- Right Section (Scrollable Content) -->

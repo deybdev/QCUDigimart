@@ -144,7 +144,7 @@ $conn->close();
         <?php include '../seller/sidebar.php'; ?>
         <div class="wrapper">
             <div class="link-button">
-                <a href="../main/home.php">Home </a><span>|</span>
+                <a href="../main/main-home.php">Home </a><span>|</span>
                 <a href="../main/about.php">About Us </a><span>|</span>
                 <a href="#">Contact</a>
             </div>

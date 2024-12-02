@@ -32,7 +32,6 @@
         GROUP BY chat_partner_id 
         ORDER BY last_message_time";
 
-    // Update the bind_param to pass the current_user_id twice more
     if ($user_type == 'seller') {
         $recent_chats_stmt = $conn->prepare($recent_chats_query);
         $recent_chats_stmt->bind_param("iiiiii", 
@@ -71,7 +70,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/umaycss.css">
+        <link rel="stylesheet" href="../css/newcss.css">
         <title>Header</title>
     </head>
 
