@@ -59,8 +59,8 @@
                 $product['id'] . ', \'' . addslashes($product['name']) . '\', \'' . 
                 addslashes($product['description']) . '\', \'' . 
                 htmlspecialchars(json_encode($images)) . '\', \'' . 
-                addslashes('₱ ' . $product['price']) . '\', \'' . 
-                addslashes($product['quantity'] . ' pcs available') . '\', \'' . 
+                addslashes('₱ ' . $product['price']) . '\', ' . 
+                ($product['is_available'] ? 'true' : 'false') . ', \'' . 
                 addslashes($product['store_name']) . '\', ' . 
                 ($product['is_saved'] ? 'true' : 'false') . ', ' . 
                 $product['s_id'] . ')">'; 
@@ -125,7 +125,7 @@
 let images = [];
 let currentIndex = 0;
 
-function showModal(id, title, description, imageSrcArray, price, quantity, storeName, isSaved, sellerId) {
+function showModal(id, title, description, imageSrcArray, price, availability, storeName, isSaved, sellerId) {
     images = JSON.parse(imageSrcArray);
     currentIndex = 0;
 
@@ -133,7 +133,10 @@ function showModal(id, title, description, imageSrcArray, price, quantity, store
     document.getElementById('modalDescription').innerText = description;
     document.getElementById('modalImage').src = images[currentIndex];
     document.getElementById('modalPrice').innerText = price;
-    document.getElementById('modalQuantity').innerText = quantity;
+
+    const availabilityElement = document.getElementById('modalQuantity');
+    availabilityElement.innerText = availability ? "Available" : "Not Available";
+    availabilityElement.style.color = availability ? "green" : "red";
 
     const storeLink = document.getElementById('modalStorename');
     storeLink.innerText = "By: " + storeName;
@@ -159,6 +162,7 @@ function showModal(id, title, description, imageSrcArray, price, quantity, store
         }, 10);
     }, 10);
 }
+
 
 function hideModal() {
     const modal = document.getElementById('productModal');

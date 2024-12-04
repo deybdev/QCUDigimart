@@ -111,12 +111,6 @@
                     <div class="form-element">
                         <button class="btn" name="submit">Submit</button>
                     </div>
-                    <div class="form-element">
-                        <div class="resend-container">
-                            <p>Didn't receive a code?</p><a class="resend-btn" id="resend-button" disabled>Resend</a>after<span id="countdown-timer">10:00</span>
-                        </div>
-                    </div>
-                    
                 </div>
             </form>
             </div>

@@ -70,7 +70,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/newcss.css">
+        <link rel="stylesheet" href="../css/transcss.css">
         <title>Header</title>
     </head>
 
@@ -161,11 +161,6 @@
                         <p><?php echo htmlspecialchars($_SESSION['seller_email']); ?></p>
                     </div>
                     <hr>
-                    <a href="../seller/page.php" class="sub-menu-link">
-                        <i class="fa-regular fa-pen-to-square"></i>
-                        <p>Our Page</p>
-                        <span class="fa-solid fa-chevron-right"></span>
-                    </a>
                     <a href="../seller/dashboard.php" class="sub-menu-link">
                         <i class="fa-solid fa-basket-shopping"></i>
                         <p>Manage Products</p>

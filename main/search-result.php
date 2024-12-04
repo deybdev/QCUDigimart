@@ -42,31 +42,33 @@
                 $result = $stmt->get_result();
 
                 // Display the products
-                if ($result->num_rows > 0) {
-                    while ($product = $result->fetch_assoc()) {
-                        $images = json_decode($product['images'], true);
-                        $firstImage = ($images && !empty($images)) ? $images[0] : 'default.jpg';
-
-                        echo '<div class="browse-product">';
-                        echo '<div class="product-img" onclick="showModal(' . 
-                            $product['id'] . ', \'' . addslashes($product['name']) . '\', \'' . 
-                            addslashes($product['description']) . '\', \'' . 
-                            htmlspecialchars(json_encode($images)) . '\', \'' . 
-                            addslashes('₱ ' . $product['price']) . '\', \'' . 
-                            addslashes($product['quantity'] . ' pcs available') . '\', \'' . 
-                            addslashes($product['store_name']) . '\', ' . 
-                            ($product['is_saved'] ? 'true' : 'false') . ', ' . 
-                            $product['s_id'] . ')">';
-                        echo '<img src="' . htmlspecialchars($firstImage) . '" alt="Product Image">';
-                        echo '</div>';
-                        echo '<div class="product-info">';
-                        echo '<h3>' . htmlspecialchars($product['name']) . '</h3>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                } else {
-                    echo "<p>No products found for your search.</p>";
+                if ($result->num_rows === 0) {
+                    echo "No products found.";
                 }
+        
+                echo '<div class="browse-products">';
+                while ($product = $result->fetch_assoc()) {
+                    $images = json_decode($product['images'], true);
+                    $image1 = ($images && !empty($images)) ? $images[0] : 'default.jpg';
+        
+                    echo '<div class="browse-product">';
+                    echo '<div class="product-img" onclick="showModal(' . 
+                        $product['id'] . ', \'' . addslashes($product['name']) . '\', \'' . 
+                        addslashes($product['description']) . '\', \'' . 
+                        htmlspecialchars(json_encode($images)) . '\', \'' . 
+                        addslashes('₱ ' . $product['price']) . '\', ' . 
+                        ($product['is_available'] ? 'true' : 'false') . ', \'' . 
+                        addslashes($product['store_name']) . '\', ' . 
+                        ($product['is_saved'] ? 'true' : 'false') . ', ' . 
+                        $product['s_id'] . ')">'; 
+                    echo '<img src="' . htmlspecialchars($image1) . '" alt="Product Image">';
+                    echo '</div>';
+                    echo '<div class="product-info">';
+                    echo '<h3>' . htmlspecialchars($product['name']) . '</h3>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+                echo '</div>';
             } catch (Exception $e) {
                 echo "Error: " . $e->getMessage();
             }
@@ -119,53 +121,51 @@
 let images = [];
 let currentIndex = 0;
 
-function showModal(id, title, description, imageSrcArray, price, quantity, storeName, isSaved, sellerId) {
+function showModal(id, title, description, imageSrcArray, price, availability, storeName, isSaved, sellerId) {
     images = JSON.parse(imageSrcArray);
     currentIndex = 0;
 
-    // Update modal content dynamically
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalDescription').innerText = description;
     document.getElementById('modalImage').src = images[currentIndex];
     document.getElementById('modalPrice').innerText = price;
-    document.getElementById('modalQuantity').innerText = quantity;
 
-    // Update store name link
+    const availabilityElement = document.getElementById('modalQuantity');
+    availabilityElement.innerText = availability ? "Available" : "Not Available";
+    availabilityElement.style.color = availability ? "green" : "red";
+
     const storeLink = document.getElementById('modalStorename');
     storeLink.innerText = "By: " + storeName;
     storeLink.href = `sellers_page.php?seller_id=${sellerId}`;
 
-    // Update save button state
     const saveButton = document.getElementById('saveButton');
     const modalSaveIcon = document.getElementById('modalSaveIcon');
     saveButton.setAttribute('data-product-id', id);
     modalSaveIcon.className = isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
 
-    // Update message button with the seller ID
     const messageButton = document.getElementById('modalMessageButton');
     messageButton.setAttribute('onclick', `contactSeller(${sellerId})`);
 
-    // Reset modal state and show it
     const modal = document.getElementById('productModal');
     const modalContent = modal.querySelector('.modal-content');
     
-    // Remove the transition before showing the modal to reset the state
     modalContent.classList.remove('show'); 
     
     setTimeout(() => {
-        modal.style.display = 'flex'; // Make the overlay visible again
+        modal.style.display = 'flex';
         setTimeout(() => {
-            modalContent.classList.add('show'); // Reapply transition class after the modal is visible
-        }, 10); // Slight delay for smooth transition
-    }, 10); // Resetting the display after a tiny delay for proper transition
+            modalContent.classList.add('show');
+        }, 10);
+    }, 10);
 }
+
 
 function hideModal() {
     const modal = document.getElementById('productModal');
-    const modalContent = modal.querySelector('.modal-content');
-    modalContent.classList.remove('show'); // Remove transition class
-    
-    modal.style.display = 'none';
+    modal.classList.remove('show'); // Remove transition class
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300); // Match CSS transition duration
 }
 
 
@@ -220,6 +220,24 @@ function contactSeller(sellerId) {
 
 function showReportModal() {
     document.getElementById("reportModal").style.display = "block";
+}
+
+function reportProduct() {
+    const productName = document.getElementById('modalTitle').innerText;
+    const productImage = document.getElementById('modalImage').src;
+    const productId = document.getElementById('saveButton').getAttribute('data-product-id'); // Extract the product ID
+
+    // Redirect to report.php with product details
+    window.location.href = `../report/report.php?product_id=${encodeURIComponent(productId)}&product_name=${encodeURIComponent(productName)}&product_image=${encodeURIComponent(productImage)}`;
+}
+
+
+function reportSeller() {
+    // Redirect to report.php with seller information
+    const storeName = document.getElementById('modalStorename').innerText.replace('By: ', ''); // Extract seller name
+    const sellerId = document.getElementById('modalMessageButton').getAttribute('onclick').match(/\d+/)[0]; // Extract seller ID
+
+    window.location.href = `../report/report.php?seller_name=${encodeURIComponent(storeName)}&seller_id=${encodeURIComponent(sellerId)}`;
 }
 
 </script>

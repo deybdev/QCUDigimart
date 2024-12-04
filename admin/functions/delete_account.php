@@ -5,7 +5,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : null;
     $user_type = isset($_POST['user_type']) ? $_POST['user_type'] : null;
 
-    // Log incoming data for debugging
     error_log("User ID: $user_id, User Type: $user_type");
 
     if (empty($user_id) || empty($user_type)) {
@@ -13,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Delete the user account based on user type
     $delete_sql = "";
     if ($user_type === 'Customer') {
         $delete_sql = "DELETE FROM customer WHERE id = ?";
@@ -24,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Prepare and execute the SQL statement to delete the user
     $stmt = $conn->prepare($delete_sql);
     $stmt->bind_param("i", $user_id);
 

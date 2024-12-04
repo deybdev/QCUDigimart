@@ -41,7 +41,7 @@
                     <div class="team-member">
                         <img src="../assets/DE LEON.jpg" alt="">
                         <h3>Karl Francis De Leon</h3>
-                        <p>Programmer /<br> Interface Designer</p>
+                        <p>Interface Designer</p>
                     </div>
                     <div class="team-member">
                         <img src="../assets/GUERRERO.jpg" alt="">

@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $name = $_POST['name'];
     $price = $_POST['price'];
-    $quantity = $_POST['quantity'];
     $description = $_POST['description'];
 
     // Check if category is "Other"
@@ -77,15 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $image_paths_json = json_encode($image_paths);
 
     // Insert product into pending_products table
-    $sql = "INSERT INTO pending_products (name, description, price, quantity, category_id, category, images, s_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO pending_products (name, description, price, category_id, category, images, s_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $stmt->bind_param("ssdisssi", $name, $description, $price, $quantity, $category_id, $category_name, $image_paths_json, $s_id);
+    $stmt->bind_param("ssdissi", $name, $description, $price, $category_id, $category_name, $image_paths_json, $s_id);
 
     if ($stmt->execute()) {
         $_SESSION['success_message'] = 'Product added successfully!';
@@ -146,7 +145,7 @@ $conn->close();
             <div class="link-button">
                 <a href="../main/main-home.php">Home </a><span>|</span>
                 <a href="../main/about.php">About Us </a><span>|</span>
-                <a href="#">Contact</a>
+                <a href="../main/contact.php">Contact</a>
             </div>
             <div class="add-pro-header">
                 <h2>Add Product</h2>
@@ -163,7 +162,6 @@ $conn->close();
                     <div class="form-fields">
                         <input type="text" name="name" placeholder="Name" required>
                         <input type="number" name="price" placeholder="Price" required>
-                        <input type="number" name="quantity" placeholder="Quantity" required>
                         
                         <!-- Category Dropdown -->
                         <select name="category" id="category-dropdown" required>

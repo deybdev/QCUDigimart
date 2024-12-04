@@ -18,7 +18,7 @@ if (isset($_POST['id'])) {
             $product = $result->fetch_assoc();
 
             // Insert the product into the product table
-            $insertSql = "INSERT INTO product (name, quantity, price, description, images, s_id, category_id, category, date_created)
+            $insertSql = "INSERT INTO product (name, is_available, price, description, images, s_id, category_id, category, date_created)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())"; // Added 'NOW()' for date_created
             $insertStmt = $conn->prepare($insertSql);
 
@@ -26,7 +26,7 @@ if (isset($_POST['id'])) {
                 $insertStmt->bind_param(
                     "sdsssiis",  // Updated to match the parameter types
                     $product['name'],
-                    $product['quantity'],
+                    $product['is_available'],
                     $product['price'],
                     $product['description'],
                     $product['images'],

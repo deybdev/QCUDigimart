@@ -25,7 +25,7 @@ if (isset($_SESSION['customer_id'])) {
     $reporter_id = $_SESSION['customer_id']; // Set the reporter_id from session (customer's ID)
 } else {
     // If not logged in, handle this as needed (e.g., redirect or show error)
-    echo "<script>alert('You must be logged in to report.'); window.location.href = '../login/login.php';</script>";
+    echo "<script>alert('You must be logged in to report.'); window.location.href = '../uploads/login.php';</script>";
     exit;
 }
 

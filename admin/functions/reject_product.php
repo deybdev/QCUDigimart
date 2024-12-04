@@ -29,7 +29,7 @@ if (isset($_POST['id']) && isset($_POST['action']) && $_POST['action'] == 'rejec
 
             // Insert product into rejected_products with category name
             $insertSql = "
-                INSERT INTO rejected_products (name, description, price, quantity, category, category_id, images, s_id, date_rejected) 
+                INSERT INTO rejected_products (name, description, price, is_available, category, category_id, images, s_id, date_rejected) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ";
             $insertStmt = $conn->prepare($insertSql);
@@ -40,7 +40,7 @@ if (isset($_POST['id']) && isset($_POST['action']) && $_POST['action'] == 'rejec
                     $product['name'],
                     $product['description'],
                     $product['price'],
-                    $product['quantity'],
+                    $product['is_available'],
                     $product['category'],     // Insert category name
                     $product['category_id'],
                     $product['images'],

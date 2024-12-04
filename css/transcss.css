@@ -1862,11 +1862,17 @@ footer{
 .modal-content .modal-right #modalPrice{
     font-weight: bold;
     font-size: 1.5rem;
-    color: rgb(219, 58, 58);
+    color: rgb(3, 11, 128);
+}
+
+.modal-content .modal-right #modalQuantity{
+    font-size: .9rem;
+    font-weight: bold;
+    letter-spacing: 1.2px;
 }
 
 .modal-content .modal-right #modalDescription{
-    color: #818181;
+    color: #5a5a5a;
 }
 
 .modal-content .modal-right #modalStorename{
@@ -2379,12 +2385,11 @@ footer{
     max-width: 1200px;
     width: 100%;
 }
-
+/* Product card styling */
 /* Product card styling */
 .seller-product-card {
     background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 300px;
     height: 450px;
@@ -2400,9 +2405,8 @@ footer{
 
 /* Image section */
 .seller-product-card .product-image {
-    height: 60%;
+    height: 200px;  /* Keep image section height fixed */
     width: 100%;
-    overflow: hidden;   
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2410,9 +2414,9 @@ footer{
 }
 
 .seller-product-card .product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%;  /* Ensure the image takes the full width of the container */
+    height: 100%;  /* Ensure the image takes the full height of the container */
+    object-fit: cover;  /* Maintain aspect ratio and cover the space */
     transition: transform 0.3s ease;
 }
 
@@ -2424,6 +2428,7 @@ footer{
 .seller-product-card .prod-info {
     padding: 15px;
     text-align: left;
+    flex-grow: 1;  /* Ensure the content takes available space */
 }
 
 .seller-product-card .prod-name {
@@ -2433,22 +2438,27 @@ footer{
     margin-bottom: 10px;
 }
 
+/* Truncate long description */
 .seller-product-card .prod-description {
     font-size: 14px;
     color: #666;
-    text-align: j;
     margin-bottom: 15px;
     line-height: 1.5;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: wrap;
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    height: 60px; /* Adjust based on line height and number of lines */
 }
 
-.seller-product-card.prod-price {
+/* Price styling */
+.seller-product-card .prod-price {
     font-size: 25px;
     font-weight: bold;
     color: #000;
 }
+
+
 
 /* Store Description Section */
 .store-desc-container {
@@ -2510,7 +2520,7 @@ footer{
 
 #recent-chats-header {
     padding: 15px;
-    background-color: #007BFF;
+    background-color: #003268;
     color: white;
     text-align: center;
     font-size: 20px;
@@ -2548,7 +2558,7 @@ footer{
 }
 
 #message-header {
-    background-color: #007BFF;
+    background-color: #003268;
     color: white;
     padding: 15px;
     text-align: center;
@@ -2604,7 +2614,7 @@ footer{
 }
 
 .message.sent {
-    background-color: #007BFF;
+    background-color: #003268;
     color: white;
     align-self: flex-end;
 }
@@ -2669,7 +2679,7 @@ footer{
 }
 
 #send-button {
-    background-color: #007bff;
+    background-color: #003268;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -2679,7 +2689,6 @@ footer{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 18px;
 }
 
 #send-button:hover {
@@ -2697,7 +2706,6 @@ footer{
     overflow-y: auto; /* Allows vertical scrolling for messages */
     max-height: calc(100vh - 150px); /* Adjust based on header/footer height */
     padding: 10px;
-    margin-bottom: 60px; /* Space for footer */
     box-sizing: border-box;
 }
 

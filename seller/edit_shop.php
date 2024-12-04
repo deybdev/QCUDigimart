@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="link-button">
                     <a href="../main/main-home.php">Home</a><span>|</span>
                     <a href="../main/about.php">About Us</a><span>|</span>
-                    <a href="#">Contact</a>
+                    <a href="../main/contact.php">Contact</a>
                 </div>
 
                 <!-- Shop Preview -->
