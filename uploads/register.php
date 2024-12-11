@@ -201,7 +201,7 @@ if (isset($_POST['register'])) {
                     </p><br>
                     <p>
                         <strong>3. Intellectual Property</strong><br>
-                        <strong>● Ownership:</strong> All content on the website, including text, graphics, logos, and trademarks, is the property of [Your Company Name] and is protected by copyright and other intellectual property laws.<br>
+                        <strong>● Ownership:</strong> All content on the website, including text, graphics, logos, and trademarks, is the property of QCU Digimart and is protected by copyright and other intellectual property laws.<br>
                         <strong>● Limited License:</strong> You are granted a limited, non-exclusive, revocable license to access and use the website for personal, non-commercial purposes.
                     </p><br>
                     <p>
@@ -211,7 +211,7 @@ if (isset($_POST['register'])) {
                     </p><br>
                     <p>
                         <strong>5. Limitation of Liability</strong><br>
-                        <strong>● No Liability:</strong> In no event shall [Your Company Name] be liable for any damages, including but not limited to direct, indirect, incidental, special, or consequential damages, arising out of or in connection with your use of the website or its content.
+                        <strong>● No Liability:</strong> In no event shall QCU Digimart be liable for any damages, including but not limited to direct, indirect, incidental, special, or consequential damages, arising out of or in connection with your use of the website or its content.
                     </p>
                     <div class="modal-footer">
                         <button id="closeModalBottom" class="btn-close btn">Close</button>

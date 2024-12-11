@@ -70,7 +70,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/transcss.css">
+        <link rel="stylesheet" href="../css/stylecss.css">
         <title>Header</title>
     </head>
 
@@ -229,6 +229,11 @@
                     <a href="../customer/saved_products.php" class="sub-menu-link">
                         <i class="fa-regular fa-heart"></i>
                         <p>Saved Products</p>
+                        <span class="fa-solid fa-chevron-right"></span>
+                    </a>
+                    <a href="../customer/reports.php" class="sub-menu-link">
+                        <i class="fa-solid fa-flag"></i>
+                        <p>Reports</p>
                         <span class="fa-solid fa-chevron-right"></span>
                     </a>
                     <a href="../uploads/logout.php" class="sub-menu-link">

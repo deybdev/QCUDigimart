@@ -28,7 +28,7 @@ $result = $conn->query($query);
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); /* Background */
+            background-color: rgba(0, 0, 0, 0.4);
             overflow: auto;
             padding-top: 60px;
         }
@@ -57,27 +57,36 @@ $result = $conn->query($query);
             text-decoration: none;
             cursor: pointer;
         }
+
+        .comment-modal{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .resolved-report .resolve-button,
+        .resolved-report .ignore-button,
+        .ignored-report .resolve-button,
+        .ignored-report .ignore-button {
+            display: none;
+        }
+        
+        .report-status {
+            font-weight: bold;
+            color: #fff;
+            padding: 5px;
+            text-transform: uppercase;
+            border-radius: 3px;
+        }
+        
     </style>
 </head>
 <body>
-
     <?php include 'sidebar.php'; ?>
 
     <div class="wrapper">
         <h1>Reports</h1>
-        <div class="filter-report">
-            <p>Sort by: </p>
-            <div class="sort-report-accounts">
-                <select name="user_type" id="user_type">
-                    <option value="all" selected>All</option>
-                    <option value="flagged">Flagged</option>
-                    <option value="ewan">Ewan</option>
-                </select>
-            </div>
-        </div>
-
         <div class="accounts-table-container reports-tab">
-
             <table id="default-table">
                 <tr>
                     <th>ID</th>
@@ -86,15 +95,22 @@ $result = $conn->query($query);
                     <th>Target</th>
                     <th>Description</th>
                     <th>Proof</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
                 
                 <?php while ($row = $result->fetch_assoc()) : ?>
-                    <tr>
+                    <tr class="<?php 
+                        echo ($row['status'] == 'resolved' ? 'resolved-report' : 
+                               ($row['status'] == 'ignored' ? 'ignored-report' : '')); 
+                    ?>">
                         <td><?php echo htmlspecialchars($row['id']); ?></td>
                         <td>
                             <?php
-                            $reporter_name = !empty($row['reporter_name']) ? htmlspecialchars($row['reporter_name']) . ' ' . htmlspecialchars($row['reporter_lastname']) : 'Unknown Reporter';
+                            $reporter_name = !empty($row['reporter_name']) ? 
+                                htmlspecialchars($row['reporter_name']) . ' ' . 
+                                htmlspecialchars($row['reporter_lastname']) : 
+                                'Unknown Reporter';
                             echo $reporter_name;
                             ?>
                         </td>
@@ -102,22 +118,46 @@ $result = $conn->query($query);
                         <td><?php echo htmlspecialchars($row['reason']); ?></td>
                         <td><?php echo htmlspecialchars($row['target_name']); ?></td>
                         <td>
-                            <!-- Button to view the description -->
                             <button class="show-description" data-description="<?php echo htmlspecialchars($row['description']); ?>">
                                 View Description
                             </button>
                         </td>
                         <td><a href="<?php echo htmlspecialchars($row['proof']); ?>" target="_blank">View Proof</a></td>
                         <td>
-                            <button>Resolve</button>
-                            <button>Ignore</button>
+                            <?php if ($row['status'] == 'resolved'): ?>
+                                <span class="report-status report-status-resolved">Resolved</span>
+                            <?php elseif ($row['status'] == 'ignored'): ?>
+                                <span class="report-status report-status-ignored">Ignored</span>
+                            <?php else: ?>
+                                <span class="report-status">Pending</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <button class="resolve-button" data-report-id="<?php echo $row['id']; ?>">Resolve</button>
+                            <button class="ignore-button">Ignore</button>
                         </td>
                     </tr>
                 <?php endwhile; ?>
-
             </table>
         </div>
     </div>
+
+     <!-- Modal for Admin Comment -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Resolve Report</h2>
+            <form id="resolveForm" action="functions/resolve_report.php" method="POST" >
+                <div class="comment-modal">
+                    <input type="hidden" id="report_id" name="report_id">
+                    <label for="admin_comment">Add a Comment</label>
+                    <textarea id="admin_comment" name="admin_comment" required></textarea>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
 
     <!-- Modal for Description -->
     <div id="descriptionModal" class="modal">
@@ -158,7 +198,71 @@ $result = $conn->query($query);
                 modal.style.display = "none";
             }
         }
-    </script>
 
+        // Resolve button script
+        var resolveButtons = document.querySelectorAll('button.resolve-button');
+
+        resolveButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var reportId = button.getAttribute('data-report-id');
+                document.getElementById("report_id").value = reportId;
+                commentModal.style.display = "block";
+            });
+        });
+
+        // Resolve form submission
+        document.getElementById('resolveForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('functions/resolve_report.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Report successfully resolved!');
+                    location.reload();
+                } else {
+                    alert('Error resolving the report. Please try again.');
+                }
+            })
+            .catch(error => {
+                alert('An error occurred. Please try again later.');
+            });
+        });
+
+        // Ignore button script
+        var ignoreButtons = document.querySelectorAll('button.ignore-button');
+
+        ignoreButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var reportId = this.closest('tr').querySelector('.resolve-button').getAttribute('data-report-id');
+                
+                if (confirm('Are you sure you want to ignore this report?')) {
+                    fetch('functions/ignore_report.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'report_id=' + reportId
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Report successfully ignored!');
+                            location.reload();
+                        } else {
+                            alert('Error ignoring the report. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('An error occurred. Please try again later.');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

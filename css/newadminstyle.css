@@ -43,6 +43,7 @@ nav {
 .navbar .nav-logout i{
     cursor: pointer;
     margin-right: 10px;
+    color: rgb(136, 0, 0);
 }
 
 .sidebar {

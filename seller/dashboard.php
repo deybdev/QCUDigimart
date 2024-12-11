@@ -19,6 +19,14 @@ if (isset($_SESSION['seller_id'])) {
     $result = $stmt->get_result();
     $pendingListings = $result->fetch_assoc()['count'] ?? 0;
 
+    // Query for active listings
+    $queryPending = "SELECT COUNT(*) AS count FROM product WHERE s_id = ?";
+    $stmt = $conn->prepare($queryPending);
+    $stmt->bind_param('i', $seller_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $activeListings = $result->fetch_assoc()['count'] ?? 0;
+
 }
 
 ?>

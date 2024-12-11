@@ -129,7 +129,7 @@ $result = $stmt->get_result();
                                     </span>
                                 </p>
                                 <p><strong>Status:</strong> 
-                                    <span class="<?php echo $statusClass; ?>">
+                                    <span style="background-color: transparent;" class="<?php echo $statusClass; ?>">
                                         <?php echo htmlspecialchars($status); ?>
                                     </span>
                                 </p>
@@ -157,33 +157,65 @@ $result = $stmt->get_result();
         </div>
     </div>
 
-    <script>
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.toggle-availability-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.getAttribute('data-id');
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Toggle availability functionality
+            document.querySelectorAll('.toggle-availability-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.getAttribute('data-id');
 
-            if (confirm('Are you sure you want to toggle availability?')) {
-                fetch('toggle_availability.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id: productId }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert('Failed to toggle availability: ' + data.message);
+                    if (confirm('Are you sure you want to toggle availability?')) {
+                        fetch('toggle_availability.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ id: productId }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                location.reload();
+                            } else {
+                                alert('Failed to toggle availability: ' + data.message);
+                            }
+                        });
                     }
                 });
-            }
+            });
+
+            // Remove product functionality
+            document.querySelectorAll('.remove-product-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.getAttribute('data-id');
+                    const productStatus = button.getAttribute('data-status');
+
+                    if (confirm('Are you sure you want to remove this product?')) {
+                        fetch('remove_product.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ id: productId, status: productStatus }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                location.reload();
+                            } else {
+                                alert('Failed to remove product: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while removing the product.');
+                        });
+                    }
+                });
+            });
         });
-    });
-});
 
     </script>
 </body>
