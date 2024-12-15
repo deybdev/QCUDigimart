@@ -70,7 +70,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/stylecss.css">
+        <link rel="stylesheet" href="../css/newstyle.css">
         <title>Header</title>
     </head>
 
@@ -118,7 +118,6 @@
                 <?php if(isset($_SESSION['seller_first_name']) && isset($_SESSION['seller_last_name'])) : ?>
                 <div class="header-nav-icons">
                     <i class="fa-regular fa-message" onclick="toggleMessages()" style="cursor: pointer;"></i>
-                                    <!-- Check if there are unread messages -->
                     <?php if (!empty($recent_chats)): ?>
                             <?php foreach ($recent_chats as $chat): ?>
                                 <?php if ($chat['unread_count'] > 0): ?>

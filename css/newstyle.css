@@ -735,20 +735,20 @@ footer{
     font-size: 16px;
 }
 
-.header-nav-icons {
-    position: relative; /* Add relative positioning to the parent */
+.header-nav-icons{
+    position: relative;
 }
 
 .new-message-notify {
     position: absolute;
-    top: 3.5px;
-    right: 200px;
+    top: 5px;
+    left: 35px;
     width: 10px;
     height: 10px;
     background-color: red;
     border-radius: 50%;
     display: inline-block;
-    z-index: 10; /* Ensure it's above other elements */
+    z-index: 10;
 }
 
 /* Hide dropdown content by default */

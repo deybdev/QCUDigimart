@@ -64,9 +64,6 @@ if (!$seller) {
                 <h4 class="store-name"><?php echo htmlspecialchars($seller['store_name']); ?></h4>
             </div>
         </div>
-        <div class="store-actions">
-            <button class="action-button message" onclick="messageSeller(<?php echo $seller_id; ?>)">Message</button>
-        </div>
     </div>
 
     <div class="store-desc-container">
@@ -118,7 +115,6 @@ if (!$seller) {
                     <p id="modalPrice"></p>
                     <p id="modalDescription"></p>
                     <p id="modalQuantity"></p>
-                    <a id="modalStorename"></a>
                 </div>
                     <div id="reportModal" class="modal">
                         <div class="report-modal-content">
@@ -149,7 +145,7 @@ if (!$seller) {
 let images = [];
 let currentIndex = 0;
 
-function showModal(id, title, description, imageSrcArray, price, availability, storeName, isSaved, sellerId) {
+function showModal(id, title, description, imageSrcArray, price, availability, isSaved, sellerId) {
     images = JSON.parse(imageSrcArray);
     currentIndex = 0;
 
@@ -161,11 +157,7 @@ function showModal(id, title, description, imageSrcArray, price, availability, s
     const availabilityElement = document.getElementById('modalQuantity');
     availabilityElement.innerText = availability ? "Available" : "Not Available";
     availabilityElement.style.color = availability ? "green" : "red";
-
-    const storeLink = document.getElementById('modalStorename');
-    storeLink.innerText = "By: " + storeName;
-    storeLink.href = `sellers_page.php?seller_id=${sellerId}`;
-
+    
     const saveButton = document.getElementById('saveButton');
     const modalSaveIcon = document.getElementById('modalSaveIcon');
     saveButton.setAttribute('data-product-id', id);
